@@ -1,0 +1,264 @@
+CREATE DATABASE MatPet_Group2
+USE MatPet_Group2
+
+CREATE TABLE Customer (
+  [Customer ID]    INT NOT NULL PRIMARY KEY,
+  [Full Name]      NVARCHAR (50)  NOT NULL,
+  [Phone Number]   VARCHAR (10) UNIQUE,
+  [Pet Name]       VARCHAR (5)  NOT NULL,
+  [Total Purchase Bonus Point] INT NULL,
+  [Total Service Bonus Point]  INT NOT NULL,
+  [Total Bonus Point]          INT NOT NULL, )
+INSERT INTO CUSTOMER ([Customer ID], [Full Name], [Phone Number], [Pet Name], [Total Purchase Bonus Point], [Total Service Bonus Point], [Total Bonus Point])
+VALUES
+
+ALTER TABLE Customer
+ADD CONSTRAINT Pk_CustomerID PRIMARY KEY ([Customer ID]);
+DROP CONSTRAINT Pk_CustomerID
+SELECT*FROM Customer
+DROP TABLE Customer ;
+
+
+CREATE TABLE Pet_Service (
+  [Pet ID] INT identity (1,1) NOT NULL PRIMARY KEY,
+  [Customer ID]  INT NOT NULL,
+  [Pet Name]     NVARCHAR (20) NOT NULL,
+  [Breeds]       VARCHAR (50)  NULL,
+  [Weighed]      VARCHAR (10)  NOT NULL,
+  [Accessory]      VARCHAR (100) NULL, 
+  [Service Use]    VARCHAR (10)  UNIQUE,)
+INSERT INTO Pet_Service ([Pet ID], [Customer ID], [Pet Name], [Breeds], [Weighed], [Accessory], [Service Use] )
+VALUES
+
+ALTER TABLE Pet_Service ADD FOREIGN KEY ([Customer ID])
+RERFERENCES Customer ([Customer ID]);
+ALTER TABLE Pet_Service ADD FOREIGN KEY ([Service Use])
+REFERENCES Cus_Services ([Service Use]);
+
+SELECT FROM Pet_Service 
+DROP TABLE Pet_Service ;
+
+
+CREATE TABLE Cus_Services (
+  [Service Use]        VARCHAR (20),
+  [Dog Price]          CHAR (30),
+  [LargeCat Price]     CHAR (30),
+  [Service Use]        PRIMARY KEY, )
+INSERT INTO Cus_Services ([Service Use], [Dog Price], [LargeCat Price], [Service Use])
+VALUES
+
+DROP TABLE Cus_Services
+SELECT* FROM Cus_Services;
+
+CREATE TABLEE Purchase (
+  [Purchase ID]           INT identity (1,1) NOT NULL PRIMARY KEY,
+  [Customer ID]           INT NOT NULL,
+  [Product Code]          NVARCHAR (4) NOT NULL,
+  [Quantity Purchase]     INT NOT NULL,
+  [Price]                 INT NOT NULL,
+  [Purchase Bonus Point]  INT NULL,
+  [Phone Number]          VARCHAR (10), 
+  PRIMARY KEY ([Purchase ID]),)           
+INSERT INTO Purchase ([Customer ID], [Product Code], [Quantity Purchase], [Price], [Purchase Bonus Point], [Phone Number])
+VALUES
+
+ALTER TABLE Purchase ADD FOREIGN KEY ([Customer ID]) 
+REFERENCES  Customer ([Customer ID]);
+ALTER TABLE Purchase ADD FOREIGN KEY ([Product Code]) 
+REFERENCES Warehouse ([Product Code]);
+
+SELECT*FROM Purchase
+DROP TABLE Purchase;
+
+
+CREATE TABLE Employee (
+  [EMP ID]        CHAR (10) UNIQUE ,
+  [Full Name]     NVARCHAR (20) NOT NULL,
+  [EMP Gender]    VARCHAR (6),
+  Dob             DATE,
+  [EMP Email]     CHAR (30),
+  [Contact Num]   INT, 
+  PRIMARY KEY ([EMP ID]), )
+INSERT INTO Employee ([EMP ID], [Full Name], [EMP Gender], Dob, [EMP Email], [Contact Num])
+VALUES
+
+ALTER TABLE Employee ADD FOREIGN KEY ([EMP ID]) 
+REFERENCES Personal_Job ([EMP ID]);
+
+DROP TABLE Employee
+SELECT*FROM Employee;
+
+CREATE TABLE Payment (
+  Job CHAR (30) ,
+  [Part Time] CHAR (30),
+  [Full Time] CHAR (30),
+  Bonus CHAR (30),
+  PRIMARY KEY (Job) ,)
+INSERT INTO Payment (Job, [Part Time], [Full Time], Bonus)
+VALUES
+
+DROP TABLE Payment
+SELECT*FROM Payment;
+
+
+CREATE TABLE Personal_Job (
+  [EMP ID] CHAR (10) UNIQUE ,
+  [Full Name] NVARCHAR (20) NOT NULL,
+  Job CHAR (30),
+  Schedule CHAR (10),
+  PRIMARY KEY ([EMP ID]), )
+INSERT INTO Personal_Job ([EMP ID], [Full Time], Job, Schedule)
+VALUES
+
+SELECT*FROM Personal_Job
+DROP TABLE Personal_Job;
+
+CREATE TABLE Per_Shift (
+  [EMP ID] CHAR (10) NOT NULL PRIMARY KEY,
+  [Full Name] NVACHAR (20) NOT NULL,
+  Monday CHAR (30),
+  Tuesday ChAR (30),
+  Thursday CHAR (30),
+  Friday CHAR (30),
+  Saturday CHAR (30),
+  Sunday CHAR (30),)
+INSERT INTO Per_Shift ([EMP ID]), [Full Name], Monday, Tuesday, Thursday, Friday, Saturday, Sunday)
+VALUES
+
+ALTER TABLE Per_Shift ADD FOREIGN KEY ([EMP ID]) 
+REFERENCES Personal_Job ([EMP ID]);
+SELECT*FROM Per_Shift
+DROP TABLE Per_Shift;
+
+CREATE TABLE Warehouse (
+  [Product Code] NVARCHAR (4) PRIMARY KEY,
+  Type CHAR (50) NOT NULL,
+  [Product Name] VARCHAR (50) NOT NULL,
+  Brand VARCHAR (50),
+  [Input Day] DATE NOT NULL,
+  [Supplier Phone Number] CHAR (50) NOT NULL,
+  [Input Price] INT NOT NULL,
+  Price INT NOT NULL,
+  Quantity INT NOT NULL,
+  Remaining INT NULL, )
+INSERT INTO Warehouse ([Product Code], Type, [Product Name], Brand, [Input Day], [Supplier Phone Number], [Input Price], Price, Quantity, Remaining)
+VALUES
+
+SELECT*FROM Warehouse
+DROP TABLE Warehouse;
+
+CREATE TABLE Input_2023 (
+  [Product Code] NVARCHAR (4) PRIMARY KEY,
+  [Input Day]    DATE NOT NULL,
+  MFX            DATE NOT NULL,
+  E_XP           DATE NOT NULL,
+  Quantity        INT NULL, )
+INSERT INTO Input_2023 ([Product Code], [Input Day], MFX, E_XP, Quantity)
+VALUES
+
+ALTER TABLE Input_2023 ADD FOREIGN KEY ([Product Code])
+REFERENCES Warehouse ([Product Code]);
+SELECT*FROM Input_2023;
+DROP TABLE Input_2023;
+
+
+---1.A trigger for inserting a time of purchase that must not be before the year 2023
+SELECT*FROM Warehouse
+GO
+CREATE TRIGGER Inserttime on Warehouse with encryption for insert as
+BEGIN
+IF (exists (SELECT*FROM Inserted where datepart (year.Input_day)<2023))
+BEGIN 
+PRINT 'Invalid with Input_day';
+Rollback tran;
+END;
+END;
+DROP TRIGGER Inserttime
+---2. Look up product names from manufacturer A
+SELECT [Product Name]
+From Warehouse
+WHERE Brand ='A'
+---3. Look up product foods 
+SELECT*FROM Warehouse
+WHERE Type = 'food'
+---4. Total expenditure
+SELECT sum ([Input Price]) as 'Total Expenditure' FROM Warehouse
+---5. Find the phone number of the merchant
+SELECT [Supplier phone number]
+FROM Warehouse
+WHERE Brand = 'ForCat'
+---6. Find the shift based on the employee ID
+CREATE proc SP_ViewWork (@EMP_ID CHAR (10) ) as
+BEGIN 
+IF (exists (SELECT*FROM Per_Shift WHERE EMP_ID = @EMP_ID))
+BEGIN 
+SELECT*FROM Per_Shift WHERE EMP_ID = @EMP_ID;
+END
+ELSE
+BEGIN
+PRINT 'Not Found';
+END
+END;
+
+exec SP_ViewWork 002;
+---7. Find the contact information of an employee in day.
+SELECT [Contact Num]
+FROM Employee
+WHERE FullName = N'Trần Bảo An'
+---8. Total revenue earned in a day
+SELECT sum ([Price]) as 'Total Service Price' FROM Pet_Service
+SELECT sum ([Price]) as 'Total Purchase Price' FROM Purchase
+---9. Manage the number of dogs and cats going to the spa/beauty salon / Receive the number of dogs and cats at the hotel for the day.
+GO
+CREATE  proc SP_ViewPetServiceUsed (@SerUse VARCHAR (20) ) as
+BEGIN
+IF (exists (SELECT*FROM Pet_Service WHERE ([Service Use]) = @SerUse) )
+BEGIN
+SELECT*FROM Pet_Service WHERE ([Service Use]) = @SerUse) )
+END
+ELSE
+BEGIN
+PRINT 'Not found';
+END
+END;
+
+GO
+exec SP_ViewPetServiceUsed 'Beautify';
+---10. Retrieve the purchase history of a customer based on Customer ID
+GO
+ALTER proc SP_billByCustomerID (@CusID INT) as
+BEGIN
+IF (exists (SELECT*FROM Purchase WHERE ([Customer ID]) = @CusID) )
+BEGIN
+SELECT*FROM Purchase WHERE ([Customer ID]) = @CusID;
+END
+ELSE
+BEGIN
+PRINT 'Chưa có đơn hàng'
+END
+END;
+GO
+exec SP_billByCustomerID '4';
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+  
+  
+  
+
+
+
+
+
+
