@@ -17,7 +17,7 @@ ADD CONSTRAINT Pk_CustomerID PRIMARY KEY ([Customer ID]);
 DROP CONSTRAINT Pk_CustomerID
 SELECT*FROM Customer
 DROP TABLE Customer ;
-
+yughgukhik
 
 CREATE TABLE Pet_Service (
   [Pet ID] INT identity (1,1) NOT NULL PRIMARY KEY,
