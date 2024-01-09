@@ -46,7 +46,9 @@ CREATE TABLE Cus_Services (
   [Service Use]        PRIMARY KEY, )
 INSERT INTO Cus_Services ([Service Use], [Dog Price], [LargeCat Price], [Service Use])
 VALUES
-
+('Beautify'',50.000VND','30.000VND','60.000VND'),
+('Hotel','210.000VND per day','160.000VND per day','200.000VND per day'),
+('Spa','170.000VND per time','100.000VND per time','150.000VND per time');
 DROP TABLE Cus_Services
 SELECT* FROM Cus_Services;
 
@@ -141,9 +143,35 @@ CREATE TABLE Warehouse (
   Price INT NOT NULL,
   Quantity INT NOT NULL,
   Remaining INT NULL, )
-INSERT INTO Warehouse ([Product Code], Type, [Product Name], Brand, [Input Day], [Supplier Phone Number], [Input Price], Price, Quantity, Remaining)
+INSERT INTO Warehouse ([Product Code], Type, [Product Name], Brand, [Input Day], [Supplier Phone Number], Price, Quantity, )
 VALUES
-
+('A1','Other_accessories','Necklace','A',22/12/2023,0987875621,50000,100),
+('A2','Other_accessories','Ball for dog','A',22/12/2023,0987875621,20000,100),
+('A3','Other_accessories','Claw tree','A',22/12/2023,0987875621,300000,100),
+('A4','Other_accessories','Eating bowl','A',22/12/2023,0987875621,100000,100),
+('A5','Other_accessories','Small size sleeping mattress','A',22/12/2023,0987875621,250000,100),
+('A6','Other_accessories','Big size sleeping mattress','A',22/12/2023,0987875621,350000,100),
+('A7','Other_accessories','Small size shipping cage','A',22/12/2023,0987875621,120000,100),
+('A8','Other_accessories','Big size shipping cage','A',22/12/2023,0987875621,200000,100),
+('A9','Other_accessories','Small size backpack','A',22/12/2023,0987875621,300000,100),
+('A10','Other_accessories','Big size backpack','A',22/12/2023,0987875621,400000,100),
+('A11','Other_accessories','Toilet','A',22/12/2023,0987875621,250000,100),
+('C1','Care_item','Shower gel','B',22/12/2023,0127589234,200000,100),
+('C2','Care_item','Anti-fungal shower gel','B',22/12/2023,0127589234,250000,100),
+('C3','Care_item','Fruity shower gel','B',22/12/2023,0127589234,250000,100),
+('C4','Care_item','Ear cleaner','B',22/12/2023,0127589234,100000,100),
+('C5','Care_item','Mint mouthwash','B',22/12/2023,0127589234,120000,100),
+('C6','Care_item','Eye wash water','B',22/12/2023,0127589234,150000,100),
+('C7','Care_item','Anti-lice ointment','B',22/12/2023,0127589234,100000,100),
+('C8','Care_item','Topical antifungal medicine','B',22/12/2023,0127589234,150000,100),
+('F1','Food','Grains for dog','C',22/12/2023,0354942315,270000,100),
+('F2','Food','Grains for cat','C',22/12/2023,0354942315,250000,100),
+('F3','Food','Pate for dog','C',22/12/2023,0354942315,320000,100),
+('F4','Food','Pate for cat','C',22/12/2023,0354942315,300000,100),
+('F5','Food','Milk ','C',22/12/2023,0354942315,100000,100),
+('S1','Sand','Genki sand','D',22/12/2023,0917078700,72000,100),
+('S2','Sand','Litter sand','D',22/12/2023,0917078700,125000,100),
+('S3','Sand','Love sand','D',22/12/2023,0917078700,136000,100);
 SELECT*FROM Warehouse
 DROP TABLE Warehouse;
 
@@ -155,7 +183,33 @@ CREATE TABLE Input_2023 (
   Quantity        INT NULL, )
 INSERT INTO Input_2023 ([Product Code], [Input Day], MFX, E_XP, Quantity)
 VALUES
-
+('A1',20/12/2023,20/12/2024,0987875621,30000,100),
+('A2',20/12/2023,20/12/2024,0987875621,15000,100),
+('A3',20/12/2023,20/12/2024,0987875621,250000,100),
+('A4',20/12/2023,20/12/2024,0987875621,70000,100),
+('A5',20/12/2023,20/12/2024,0987875621,200000,100),
+('A6',20/12/2023,20/12/2024,0987875621,300000,100),
+('A7',20/12/2023,20/12/2024,0987875621,100000,100),
+('A8',20/12/2023,20/12/2024,0987875621,170000,100),
+('A9',20/12/2023,20/12/2024,0987875621,220000,100),
+('A10',20/12/2023,20/12/2024,0987875621,320000,100),
+('A11',20/12/2023,20/12/2024,0987875621,200000,100),
+('C1',20/12/2023,20/12/2024,0127589234,180000,100),
+('C2',20/12/2023,20/12/2024,0127589234,210000,100),
+('C3',20/12/2023,20/12/2024,0127589234,210000,100),
+('C4',20/12/2023,20/12/2024,0127589234,70000,100),
+('C5',20/12/2023,20/12/2024,0127589234,90000,100),
+('C6',20/12/2023,20/12/2024,0127589234,110000,100),
+('C7',20/12/2023,20/12/2024,0127589234,70000,100),
+('C8',20/12/2023,20/12/2024,0127589234,110000,100),
+('F1',20/12/2023,20/12/2024,0354942315,220000,100),
+('F2',20/12/2023,20/12/2024,0354942315,200000,100),
+('F3',20/12/2023,20/12/2024,0354942315,280000,100),
+('F4',20/12/2023,20/12/2024,0354942315,260000,100),
+('F5',20/12/2023,20/12/2024,0354942315,70000,100),
+('S1',20/12/2023,20/12/2024,0917078700,50000,100),
+('S2',20/12/2023,20/12/2024,0917078700,90000,100),
+('S3',20/12/2023,20/12/2024,0917078700,100000,100);
 ALTER TABLE Input_2023 ADD FOREIGN KEY ([Product Code])
 REFERENCES Warehouse ([Product Code]);
 SELECT*FROM Input_2023;
