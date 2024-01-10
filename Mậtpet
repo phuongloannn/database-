@@ -8,7 +8,7 @@ CREATE TABLE Customer (
   [Pet Name]       VARCHAR (5)  NOT NULL,
   [Total Purchase Bonus Point] INT NULL,
   [Total Service Bonus Point]  INT NOT NULL,
-  [Total Bonus Point]          INT NOT NULL, )
+  [Total Bonus Point]          INT NOT NULL,);
 INSERT INTO CUSTOMER ([Customer ID], [Full Name], [Phone Number], [Pet Name], [Total Purchase Bonus Point], [Total Service Bonus Point], [Total Bonus Point])
 VALUES
 (101,'Hoàng Tiến Đức',0822364711,'Bella',60,3,60),
@@ -18,23 +18,18 @@ VALUES
 (105,'Hoàng Nam Minh',0956192264,'Jerry',40,20,60),
 (106,'Trần Hoàng Anh',0328564788,'Haili',40,22,62),
 (107,'Phạm Thanh Hải',0898005215,'Chick',30,15,45);
-ALTER TABLE Customer
-ADD CONSTRAINT Pk_CustomerID PRIMARY KEY ([Customer ID]);
-DROP CONSTRAINT Pk_CustomerID
 SELECT*FROM Customer
 DROP TABLE Customer ;
-
-
 CREATE TABLE Pet_Service (
   [Pet ID] INT identity (1,1) NOT NULL PRIMARY KEY,
-  [Customer ID]  INT NOT NULL,
+  [Customer ID]  INT NOT NULL FOREIGN KEY REFERENCES Customer ([Customer ID]),
   [Pet Name]     NVARCHAR (20) NOT NULL,
   [Breeds]       VARCHAR (50)  NULL,
   [Weighed]      VARCHAR (10)  NOT NULL,
   [Accessory]      VARCHAR (100) NULL, 
-  [Service Use]    VARCHAR (10)  UNIQUE,
+  [Service Use]    VARCHAR (10)  UNIQUE FOREIGN KEY REFERENCES Cus_Services ([Service Use]),
   [Start time]     VARCHAR(100),
-  [End time]       VARCHAR(100),)      
+  [End time]       VARCHAR(100));
 INSERT INTO Pet_Service ([Pet ID], [Customer ID], [Pet Name], [Breeds], [Weighed], [Accessory], [Service Use],[Start time] ,[End time])
 VALUES
 (1,101,'Bella','Persian Cat',2,'Calm, friendly','Bandana','Beautify','2023-01-15 06:30','2023-01-15 07:30'),
@@ -47,14 +42,8 @@ VALUES
 (8,106,'Haili','Labrador',3,'Energetic, Talkative','Bow tie, hat','Beautify','2023-11-15 15:45','2023-11-15 15:45'),
 (9,107,'Voi','Persian Cat',5,'Friendly, Talkative','Hat','Spa','2023-12-24 15:30','2023-12-24 16:30');
 
-ALTER TABLE Pet_Service ADD FOREIGN KEY ([Customer ID])
-RERFERENCES Customer ([Customer ID]);
-ALTER TABLE Pet_Service ADD FOREIGN KEY ([Service Use])
-REFERENCES Cus_Services ([Service Use]);
-
 SELECT FROM Pet_Service 
 DROP TABLE Pet_Service ;
-
 
 CREATE TABLE Cus_Services (
   [Service Use]        VARCHAR (20) PRIMARY KEY,
@@ -64,24 +53,22 @@ CREATE TABLE Cus_Services (
 INSERT INTO Cus_Services ([Service Use], [Dog Price], [SmallCat Price],[LargeCat Price] )
 VALUES
 
-
-
 ('Beautify'',50.000VND','30.000VND','60.000VND'),
 ('Hotel','210.000VND per day','160.000VND per day','200.000VND per day'),
 ('Spa','170.000VND per time','100.000VND per time','150.000VND per time');
 DROP TABLE Cus_Services
 SELECT* FROM Cus_Services;
 
-CREATE TABLEE Purchase (
+CREATE TABLE Purchase (
   [Purchase ID]           INT identity (1,1) NOT NULL PRIMARY KEY,
-  [Customer ID]           INT NOT NULL,
-  [Product Code]          NVARCHAR (4) NOT NULL,
+  [Customer ID]           INT NOT NULL FOREIGN KEY REFERENCES Customer ([Customer ID]),
+  [Product Code]          NVARCHAR (4) NOT NULL FOREIGN KEY REFERENCES Warehouse ([Product Code]),
   [Quantity Purchase]     INT NOT NULL,
   [Price]                 INT NOT NULL,
   [Purchase]              VARCHAR(100),
   [Purchase Bonus Point]  INT NULL,
   [Phone Number]          VARCHAR (10), 
-  PRIMARY KEY ([Purchase ID]),)           
+  );           
 INSERT INTO Purchase ([Customer ID], [Product Code], [Quantity Purchase], [Price],[Purchase], [Purchase Bonus Point], [Phone Number])
 VALUES
 (101,'A3',2,600000,'2023-01-15 08:30',60,0822364711),
@@ -101,13 +88,12 @@ DROP TABLE Purchase;
 
 
 CREATE TABLE Employee (
-  [EMP ID]        CHAR (10) UNIQUE ,
+  [EMP ID]        CHAR (10) PRIMARY KEY UNIQUE,
   [Full Name]     NVARCHAR (20) NOT NULL,
   [EMP Gender]    VARCHAR (6),
   Dob             DATE,
   [EMP Email]     CHAR (30),
-  [Contact Num]   INT, 
-  PRIMARY KEY ([EMP ID]) );
+  [Contact Num]   INT);
 INSERT INTO Employee ([EMP ID], [Full Name], [EMP Gender], Dob, [EMP Email], [Contact Num])
 VALUES
         ('1', 'Đàm Văn Tài', 'Male', '2004-10-16', 'damvantai@gmail.com', '388595898'),
@@ -121,7 +107,6 @@ VALUES
        ('9', 'Xuân Bách', 'Male', '2004-10-09', 'bach@gmail.com', '0283276354'),
        ('10', 'Hữu Nghi', 'Male', '2004-04-01', 'nghi@gmail.com', '082732863');
 
-
 ALTER TABLE Employee ADD FOREIGN KEY ([EMP ID]) 
 REFERENCES Personal_Job ([EMP ID]);
 
@@ -129,11 +114,10 @@ DROP TABLE Employee
 SELECT*FROM Employee;
 
 CREATE TABLE Payment (
-  Job CHAR (30) ,
+  Job CHAR (30) PRIMARY KEY,
   [Part Time] CHAR (30),
   [Full Time] CHAR (30),
-  Bonus CHAR (30),
-  PRIMARY KEY (Job) );
+  Bonus CHAR (30));
 INSERT INTO Payment (Job, [Part Time], [Full Time], Bonus)
 VALUES
 ('Accountant', 25000, 300000, '15.000VND/hour'),
@@ -147,11 +131,11 @@ SELECT*FROM Payment;
 
 
 CREATE TABLE Personal_Job (
-  [EMP ID] CHAR (10) UNIQUE ,
+  [EMP ID] CHAR (10) PRIMARY KEY UNIQUE ,
   [Full Name] NVARCHAR (20) NOT NULL,
   Job CHAR (30),
   Schedule CHAR (10),
-  PRIMARY KEY ([EMP ID]) );
+  );
 INSERT INTO Personal_Job ([EMP ID], [Full Name], Job, Schedule)
 VALUES
       ('3', 'Phương Loan', 'Customer service', 'partime'),
@@ -170,7 +154,7 @@ DROP TABLE Personal_Job;
 
 CREATE TABLE Per_Shift (
   [EMP ID] CHAR (10) NOT NULL PRIMARY KEY,
-  [Full Name] NVACHAR (20) NOT NULL,
+  [Full Name] NVARCHAR (20) NOT NULL,
   Monday CHAR (30),
   Tuesday ChAR (30),
   Thursday CHAR (30),
@@ -202,7 +186,7 @@ CREATE TABLE Warehouse (
   [Input Day] DATE NOT NULL,
   [Supplier Phone Number] CHAR (50) NOT NULL,
   Price INT NOT NULL,
-  Quantity INT NOT NULL,
+  Quantity INT NOT NULL);
 
 INSERT INTO Warehouse ([Product Code], Type, [Product Name], Brand, [Input Day], [Supplier Phone Number], Price, Quantity, )
 
