@@ -302,83 +302,98 @@ SELECT*FROM Input_2023;
 DROP TABLE Input_2023;
 
 
----1.A trigger for inserting a time of purchase that must not be before the year 2023
-SELECT*FROM Warehouse
-GO
-CREATE TRIGGER Inserttime on Warehouse with encryption for insert as
+-- 1. A trigger for inserting a time of purchase that must not be before the year 2023
+CREATE TRIGGER Inserttime ON Warehouse 
+FOR INSERT AS
 BEGIN
-IF (exists (SELECT*FROM Inserted where datepart (year.Input_day)<2023))
-BEGIN 
-PRINT 'Invalid with Input_day';
-Rollback tran;
+    IF EXISTS (SELECT * FROM Inserted WHERE YEAR(Input_day) < 2023)
+    BEGIN 
+        PRINT 'Invalid with Input_day';
+        ROLLBACK TRANSACTION;
+    END;
 END;
-END;
-DROP TRIGGER Inserttime
----2. Look up product names from manufacturer A
+GO
+
+-- 2. Look up product names from manufacturer A
 SELECT [Product Name]
-From Warehouse
-WHERE Brand ='A'
----3. Look up product foods 
-SELECT*FROM Warehouse
-WHERE Type = 'food'
----4. Total expenditure
-SELECT sum ([Input Price]) as 'Total Expenditure' FROM Warehouse
----5. Find the phone number of the merchant
+FROM Warehouse
+WHERE Brand = 'A';
+
+-- 3. Look up product foods 
+SELECT *
+FROM Warehouse
+WHERE Type = 'food';
+
+-- 4. Total expenditure
+SELECT SUM([Input Price]) AS 'Total Expenditure' 
+FROM Warehouse;
+
+-- 5. Find the phone number of the merchant
 SELECT [Supplier phone number]
 FROM Warehouse
-WHERE Brand = 'ForCat'
----6. Find the shift based on the employee ID
-CREATE proc SP_ViewWork (@EMP_ID CHAR (10) ) as
-BEGIN 
-IF (exists (SELECT*FROM Per_Shift WHERE EMP_ID = @EMP_ID))
-BEGIN 
-SELECT*FROM Per_Shift WHERE EMP_ID = @EMP_ID;
-END
-ELSE
-BEGIN
-PRINT 'Not Found';
-END
-END;
+WHERE Brand = 'ForCat';
 
-exec SP_ViewWork 002;
----7. Find the contact information of an employee in day.
+-- 6. Find the shift based on the employee ID
+CREATE PROCEDURE SP_ViewWork 
+    @EMP_ID CHAR(10) 
+AS
+BEGIN 
+    IF EXISTS (SELECT * FROM Per_Shift WHERE EMP_ID = @EMP_ID)
+    BEGIN 
+        SELECT * FROM Per_Shift WHERE EMP_ID = @EMP_ID;
+    END
+    ELSE
+    BEGIN
+        PRINT 'Not Found';
+    END
+END;
+GO
+EXEC SP_ViewWork '002';
+
+-- 7. Find the contact information of an employee in day.
 SELECT [Contact Num]
 FROM Employee
-WHERE FullName = N'Trần Bảo An'
----8. Total revenue earned in a day
-SELECT sum ([Price]) as 'Total Service Price' FROM Pet_Service
-SELECT sum ([Price]) as 'Total Purchase Price' FROM Purchase
----9. Manage the number of dogs and cats going to the spa/beauty salon / Receive the number of dogs and cats at the hotel for the day.
-GO
-CREATE  proc SP_ViewPetServiceUsed (@SerUse VARCHAR (20) ) as
-BEGIN
-IF (exists (SELECT*FROM Pet_Service WHERE ([Service Use]) = @SerUse) )
-BEGIN
-SELECT*FROM Pet_Service WHERE ([Service Use]) = @SerUse) )
-END
-ELSE
-BEGIN
-PRINT 'Not found';
-END
-END;
+WHERE FullName = N'Trần Bảo An';
 
-GO
-exec SP_ViewPetServiceUsed 'Beautify';
----10. Retrieve the purchase history of a customer based on Customer ID
-GO
-ALTER proc SP_billByCustomerID (@CusID INT) as
+-- 8. Total revenue earned in a day
+SELECT SUM([Price]) AS 'Total Service Price' 
+FROM Pet_Service;
+SELECT SUM([Price]) AS 'Total Purchase Price' 
+FROM Purchase;
+
+-- 9. Manage the number of dogs and cats going to the spa/beauty salon / Receive the number of dogs and cats at the hotel for the day.
+CREATE PROCEDURE SP_ViewPetServiceUsed 
+    @SerUse VARCHAR(20) 
+AS
 BEGIN
-IF (exists (SELECT*FROM Purchase WHERE ([Customer ID]) = @CusID) )
-BEGIN
-SELECT*FROM Purchase WHERE ([Customer ID]) = @CusID;
-END
-ELSE
-BEGIN
-PRINT 'Chưa có đơn hàng'
-END
+    IF EXISTS (SELECT * FROM Pet_Service WHERE [Service Use] = @SerUse)
+    BEGIN
+        SELECT * FROM Pet_Service WHERE [Service Use] = @SerUse;
+    END
+    ELSE
+    BEGIN
+        PRINT 'Not found';
+    END
 END;
 GO
-exec SP_billByCustomerID '4';
+EXEC SP_ViewPetServiceUsed 'Beautify';
+
+-- 10. Retrieve the purchase history of a customer based on Customer ID
+ALTER PROCEDURE SP_billByCustomerID 
+    @CusID INT 
+AS
+BEGIN
+    IF EXISTS (SELECT * FROM Purchase WHERE [Customer ID] = @CusID)
+    BEGIN
+        SELECT * FROM Purchase WHERE [Customer ID] = @CusID;
+    END
+    ELSE
+    BEGIN
+        PRINT 'Chưa có đơn hàng';
+    END
+END;
+GO
+EXEC SP_billByCustomerID 4;
 
 
 
