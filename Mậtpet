@@ -110,6 +110,11 @@ CREATE TABLE Employee (
   PRIMARY KEY ([EMP ID]), )
 INSERT INTO Employee ([EMP ID], [Full Name], [EMP Gender], Dob, [EMP Email], [Contact Num])
 VALUES
+(1, 'Đàm Văn Tài', 'M', '2004-10-16', 'damvantai@gmail.com', '088595898'),
+(2, 'Trần Tuấn Anh', 'M', '2004-01-01', 'Trantuananh@gmail.com', '063880374'),
+(3, 'Phương Loan', 'F', '2004-02-02', 'Phuongloan@gmail.com', '059025735'),
+(4, 'Bích Ngọc', 'F', '2004-03-03', 'bichngoc@gmail.com', '055491959'),
+(5, 'Trần Thị Trang', 'F', '2004-04-04', 'trangtran@gmail.com', '094489459');
 
 ALTER TABLE Employee ADD FOREIGN KEY ([EMP ID]) 
 REFERENCES Personal_Job ([EMP ID]);
@@ -125,6 +130,11 @@ CREATE TABLE Payment (
   PRIMARY KEY (Job) ,)
 INSERT INTO Payment (Job, [Part Time], [Full Time], Bonus)
 VALUES
+('Accountant', 25000, 300000, '15.000VND/hour'),
+('Customer service', NULL, 200000, '15.000VND/hour'),
+('Employee management', NULL, 200000, '25.000VND/hour'),
+('Pet service provider', 25000, 300000, '15.000VND/hour'),
+('Storage management', NULL, 200000, '25.000VND/hour');
 
 DROP TABLE Payment
 SELECT*FROM Payment;
@@ -136,8 +146,13 @@ CREATE TABLE Personal_Job (
   Job CHAR (30),
   Schedule CHAR (10),
   PRIMARY KEY ([EMP ID]), )
-INSERT INTO Personal_Job ([EMP ID], [Full Time], Job, Schedule)
+INSERT INTO Personal_Job ([EMP ID], [Full Name], Job, Schedule)
 VALUES
+(1, 'Phương Loan', 'Customer service', 'partime'),
+(2, 'Trần tuấn anh', 'Customer service', 'partime'),
+(3, 'Đàm Văn Tài', 'pet service provider', 'partime'),
+(4, 'Bích Ngọc', 'Storage management', 'fullime'),
+(5, 'Trần Thị Trang', 'pet service provider', 'fulltime');
 
 SELECT*FROM Personal_Job
 DROP TABLE Personal_Job;
@@ -153,7 +168,11 @@ CREATE TABLE Per_Shift (
   Sunday CHAR (30),)
 INSERT INTO Per_Shift ([EMP ID]), [Full Name], Monday, Tuesday, Thursday, Friday, Saturday, Sunday)
 VALUES
-
+(1, 'Đàm Văn Tài', 'morning', 'afternoon', 'night', 'morning', 'afternoon', 'night', 'none'),
+(2, 'Trần Tuấn Anh', 'night', 'afternoon', 'morning', 'night', 'afternoon', 'morning', 'none'),
+(3, 'Bích Ngọc', 'fullday', 'fullday', 'fullday', 'fullday', 'fullday', 'fullday', 'none'),
+(4, 'Phương Loan', 'morning', 'morning', 'morning', 'morning', 'morning', 'morning', 'none'),
+(5, 'Trần Thị Trang', 'fullday', 'fullday', 'fullday', 'fullday', 'fullday', 'fullday', 'none');
 ALTER TABLE Per_Shift ADD FOREIGN KEY ([EMP ID]) 
 REFERENCES Personal_Job ([EMP ID]);
 SELECT*FROM Per_Shift
