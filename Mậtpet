@@ -1,6 +1,6 @@
 CREATE DATABASE MatPet_Group2
 USE MatPet_Group2
-
+lijj
 CREATE TABLE Customer (
   [Customer ID]    INT NOT NULL PRIMARY KEY,
   [Full Name]      NVARCHAR (50)  NOT NULL,
