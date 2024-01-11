@@ -96,7 +96,7 @@ DROP TABLE Purchase;
 
 
 CREATE TABLE Employee (
-  [EMP ID]        CHAR (10) PRIMARY KEY UNIQUE,
+  [EMP ID]        CHAR (10) PRIMARY KEY ,
   [Full Name]     NVARCHAR (20) NOT NULL,
   [EMP Gender]    VARCHAR (6),
   Dob             DATE,
@@ -139,7 +139,7 @@ SELECT*FROM Payment;
 
 
 CREATE TABLE Personal_Job (
-  [EMP ID] CHAR (10) PRIMARY KEY UNIQUE ,
+  [EMP ID] CHAR (10) PRIMARY KEY ,
   [Full Name] NVARCHAR (20) NOT NULL,
   Job CHAR (30),
   Schedule CHAR (10),
